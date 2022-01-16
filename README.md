@@ -27,12 +27,16 @@ This module requires the following modules/libraries:
 
 .Retrofit2
 
-## To run app:
+.Pagination
 
--clone repository
--run build
--set account in new times api
--add your api key to build.gradle file
+## Future enhancement app:
+
+-Migrate to hilt
+-add kotlin-dsl with center build src to control dependencies
+-enhancement in ui
+-add unit testing , ui test
+-set app multi module
+
 
 
 ## To build app from android studio terminal:
