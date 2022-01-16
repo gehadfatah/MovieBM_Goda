@@ -10,11 +10,11 @@ import com.goda.movieapp.util.QueryHelper
 import com.goda.movieapp.view.base.BaseViewModel
 import javax.inject.Inject
 
-class ChildViewModel  @Inject constructor(repository: MovieRepository) : BaseViewModel() {
+class TopRatedViewModel  @Inject constructor(repository: MovieRepository) : BaseViewModel() {
 
     private var movieDataSourceFactory: MovieDataSourceFactory =
         MovieDataSourceFactory(
-            MovieRepository.QUERYTAG.DISCOVER,
+            MovieRepository.QUERYTAG.TOPRATED,
             QueryHelper.childMovies(),
             repository
         )

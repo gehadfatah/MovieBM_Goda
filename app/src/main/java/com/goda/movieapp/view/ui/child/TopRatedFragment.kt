@@ -17,20 +17,20 @@ import com.goda.movieapp.domain.pagination.PaginationState
 import com.goda.movieapp.domain.pojo.MovieResult
 import com.goda.movieapp.view.customview.EmptyView
 import com.goda.movieapp.view.ui.home.adapter.MoviePagedListAdapter
-import com.goda.movieapp.view.ui.home.adapter.movieInteractionListener
+import com.goda.movieapp.view.ui.home.adapter.MovieInteractionListener
 import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.fragment_child.*
 import javax.inject.Inject
 
-class ChildFragment : Fragment(R.layout.fragment_child) , SwipeRefreshLayout.OnRefreshListener,
-    movieInteractionListener {
+class TopRatedFragment : Fragment(R.layout.fragment_child) , SwipeRefreshLayout.OnRefreshListener,
+    MovieInteractionListener {
 
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
 
     private lateinit var pagedAdapter: MoviePagedListAdapter
 
-    private lateinit var childViewModel: ChildViewModel
+    private lateinit var topRatedViewModel: TopRatedViewModel
 
     override fun onAttach(context: Context) {
         AndroidSupportInjection.inject(this)
@@ -39,7 +39,7 @@ class ChildFragment : Fragment(R.layout.fragment_child) , SwipeRefreshLayout.OnR
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        childViewModel = ViewModelProvider(this,viewModelFactory).get(ChildViewModel::class.java)
+        topRatedViewModel = ViewModelProvider(this,viewModelFactory).get(TopRatedViewModel::class.java)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -50,7 +50,7 @@ class ChildFragment : Fragment(R.layout.fragment_child) , SwipeRefreshLayout.OnR
     }
 
     private fun obsStates() {
-        childViewModel.paginationState?.observe(viewLifecycleOwner, Observer {
+        topRatedViewModel.paginationState?.observe(viewLifecycleOwner, Observer {
             updateUIPaginationState(it)
             pagedAdapter.updatePaginationState(it)
         })
@@ -65,7 +65,7 @@ class ChildFragment : Fragment(R.layout.fragment_child) , SwipeRefreshLayout.OnR
     }
 
     private fun obsData() {
-        childViewModel.moviePagedLiveData.observe(viewLifecycleOwner, Observer { pagedList ->
+        topRatedViewModel.moviePagedLiveData.observe(viewLifecycleOwner, Observer { pagedList ->
             pagedAdapter.submitList(pagedList)
         })
     }
@@ -84,7 +84,7 @@ class ChildFragment : Fragment(R.layout.fragment_child) , SwipeRefreshLayout.OnR
     }
 
     override fun onClickRetry() {
-        childViewModel.refreshFailedRequest()
+        topRatedViewModel.refreshFailedRequest()
     }
 
     override fun onMovieClick(movieResult: MovieResult, pos: Int) {
@@ -119,7 +119,7 @@ class ChildFragment : Fragment(R.layout.fragment_child) , SwipeRefreshLayout.OnR
     }
 
     override fun onRefresh() {
-        childViewModel.refreshAllList()
+        topRatedViewModel.refreshAllList()
     }
 
 }
