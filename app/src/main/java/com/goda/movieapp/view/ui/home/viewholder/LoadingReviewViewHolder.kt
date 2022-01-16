@@ -4,12 +4,12 @@ import androidx.recyclerview.widget.RecyclerView
 import android.view.View
 import android.view.View.VISIBLE
 import com.goda.movieapp.domain.pagination.PaginationState
-import com.goda.movieapp.view.ui.home.adapter.MovieInteractionListener
+import com.goda.movieapp.view.ui.home.adapter.OnRetryReview
 import kotlinx.android.synthetic.main.loading_view_layout.view.*
 
-class LoadingViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+class LoadingReviewViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
-    fun bind(status: PaginationState?, listener: MovieInteractionListener) {
+    fun bind(status: PaginationState?, listener: OnRetryReview) {
         hideViews()
         setVisibleRightViews(status)
         itemView.btn_retry.setOnClickListener{ listener.onClickRetry() }
