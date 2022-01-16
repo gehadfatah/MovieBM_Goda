@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:visibility="gone">
+    android:visibility="gone"
+    tools:visibility="gone">
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/iv_state"
@@ -39,7 +40,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:fontFamily="@font/montserrat_light"
+        android:fontFamily="@font/montserrat_medium"
         android:paddingStart="24dp"
         android:paddingEnd="24dp"
         android:text="@string/operational_error_message"
