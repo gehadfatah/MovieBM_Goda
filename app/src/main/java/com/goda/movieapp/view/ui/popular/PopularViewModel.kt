@@ -14,7 +14,7 @@ class PopularViewModel @Inject constructor(repository: MovieRepository) : BaseVi
 
     private var movieDataSourceFactory: MovieDataSourceFactory =
         MovieDataSourceFactory(
-            MovieRepository.QUERYTAG.DISCOVER,
+            MovieRepository.QUERYTAG.POPULAR,
             QueryHelper.popularMovies(),
             repository
         )

@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.goda.movieapp.common.ViewModelFactory
 import com.goda.movieapp.di.key.ViewModelKey
-import com.goda.movieapp.view.ui.child.ChildViewModel
+import com.goda.movieapp.view.ui.child.TopRatedViewModel
 import com.goda.movieapp.view.ui.detail.DetailViewModel
 import com.goda.movieapp.view.ui.favorite.FavoriteViewModel
 import com.goda.movieapp.view.ui.find.FindViewModel
@@ -44,8 +44,8 @@ interface ViewModelModule {
 
     @Binds
     @IntoMap
-    @ViewModelKey(ChildViewModel::class)
-    fun bindChildViewModel(childViewModel: ChildViewModel) : ViewModel
+    @ViewModelKey(TopRatedViewModel::class)
+    fun bindChildViewModel(topRatedViewModel: TopRatedViewModel) : ViewModel
 
 
     @Binds

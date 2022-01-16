@@ -17,13 +17,14 @@ import com.goda.movieapp.domain.pagination.PaginationState
 import com.goda.movieapp.domain.pojo.MovieResult
 import com.goda.movieapp.view.customview.EmptyView
 import com.goda.movieapp.view.ui.home.adapter.MoviePagedListAdapter
-import com.goda.movieapp.view.ui.home.adapter.movieInteractionListener
+import com.goda.movieapp.view.ui.home.adapter.MovieClickerListener
+import com.goda.movieapp.view.ui.home.adapter.MovieInteractionListener
 import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.popular_fragment.*
 import javax.inject.Inject
 
 class PopularFragment : Fragment(R.layout.popular_fragment), SwipeRefreshLayout.OnRefreshListener,
-    movieInteractionListener {
+    MovieInteractionListener, MovieClickerListener {
 
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory

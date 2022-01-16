@@ -1,6 +1,6 @@
 package com.goda.movieapp.di.module
 
-import com.goda.movieapp.view.ui.child.ChildFragment
+import com.goda.movieapp.view.ui.child.TopRatedFragment
 import com.goda.movieapp.view.ui.detail.DetailFragment
 import com.goda.movieapp.view.ui.favorite.FavoriteFragment
 import com.goda.movieapp.view.ui.find.FindFragment
@@ -25,7 +25,7 @@ interface FragmentModule {
     fun contributePopularFragment(): PopularFragment
 
     @ContributesAndroidInjector
-    fun contributeChildFragment(): ChildFragment
+    fun contributeTopRatedFragment(): TopRatedFragment
 
     @ContributesAndroidInjector
     fun contributeDetailFragment(): DetailFragment
