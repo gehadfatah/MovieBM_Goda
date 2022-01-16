@@ -13,12 +13,12 @@ import com.goda.movieapp.R
 import com.goda.movieapp.domain.pojo.MovieResult
 import com.goda.movieapp.view.customview.EmptyView
 import com.goda.movieapp.view.ui.favorite.adapter.FavoriteListAdapter
-import com.goda.movieapp.view.ui.home.adapter.movieInteractionListener
+import com.goda.movieapp.view.ui.home.adapter.MovieInteractionListener
 import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.fragment_favorite.*
 import javax.inject.Inject
 
-class FavoriteFragment : Fragment(R.layout.fragment_favorite), movieInteractionListener {
+class FavoriteFragment : Fragment(R.layout.fragment_favorite), MovieInteractionListener {
 
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory

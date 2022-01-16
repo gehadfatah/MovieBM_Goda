@@ -5,10 +5,10 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.goda.movieapp.R
 import com.goda.movieapp.domain.pojo.MovieResult
-import com.goda.movieapp.view.ui.home.adapter.movieInteractionListener
+import com.goda.movieapp.view.ui.home.adapter.MovieInteractionListener
 import com.goda.movieapp.view.ui.home.viewholder.MovieViewHolder
 
-class FavoriteListAdapter(private val listener: movieInteractionListener) : RecyclerView.Adapter<MovieViewHolder>() {
+class FavoriteListAdapter(private val listener: MovieInteractionListener) : RecyclerView.Adapter<MovieViewHolder>() {
 
     private var movies: List<MovieResult> = listOf()
 
