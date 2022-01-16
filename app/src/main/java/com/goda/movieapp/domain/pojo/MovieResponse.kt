@@ -12,13 +12,13 @@ import kotlinx.android.parcel.Parcelize
 data class MovieResult(
     @PrimaryKey
     val id: Long,
-    val original_title: String,
-    val poster_path: String?,
-    val backdrop_path: String?,
-    val popularity: Double,
-    val title: String,
+    val original_title: String="",
+    val poster_path: String?="",
+    val backdrop_path: String?="",
+    val popularity: Double=0.0,
+    val title: String="",
     var isFavourite: Boolean=false,
-    val vote_average: Double
+    val vote_average: Double=0.0
 ) : Parcelable
 
 data class MovieDetail(
