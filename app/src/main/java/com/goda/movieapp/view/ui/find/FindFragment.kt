@@ -11,6 +11,7 @@ import android.widget.LinearLayout
 import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
+import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -23,15 +24,18 @@ import com.goda.movieapp.domain.pagination.PaginationState
 import com.goda.movieapp.domain.pojo.MovieResult
 import com.goda.movieapp.view.customview.EmptyView
 import com.goda.movieapp.view.ui.home.adapter.MoviePagedListAdapter
-import com.goda.movieapp.view.ui.home.adapter.movieInteractionListener
+import com.goda.movieapp.view.ui.home.adapter.MovieInteractionListener
 import dagger.android.support.AndroidSupportInjection
-import kotlinx.android.synthetic.main.fragment_find.*
+import kotlinx.android.synthetic.main.fragment_find.emptyView
+import kotlinx.android.synthetic.main.fragment_find.searchList
+import kotlinx.android.synthetic.main.fragment_find.swipe
+import kotlinx.android.synthetic.main.search_layout.*
 import javax.inject.Inject
 
 
-class FindFragment : Fragment(R.layout.fragment_find), SwipeRefreshLayout.OnRefreshListener,
-    movieInteractionListener {
-     public  var searchText:String=""
+class FindFragment : Fragment(R.layout.search_layout), SwipeRefreshLayout.OnRefreshListener,
+    MovieInteractionListener {
+       var searchText:String=""
     private lateinit var searchView: SearchView
 
     @Inject
@@ -140,16 +144,16 @@ class FindFragment : Fragment(R.layout.fragment_find), SwipeRefreshLayout.OnRefr
 
         val searchManager = requireActivity().getSystemService(Context.SEARCH_SERVICE) as SearchManager
 
-        val menuItemSearch = menu.findItem(R.id.action_search)
+       /* val menuItemSearch = menu.findItem(R.id.action_search)
         searchView = menuItemSearch.actionView as SearchView
         searchView.setSearchableInfo(searchManager.getSearchableInfo(requireActivity().componentName))
         menuItemSearch.expandActionView()
-        personalizeSearchView()
-        initSearchViewListener()
+        personalizeSearchView()*/
+        initViewListener()
     }
 
-    private fun initSearchViewListener() {
-        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+    private fun initViewListener() {
+      /*  searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
                 this.callSearch(query)
                 return false
@@ -164,7 +168,16 @@ class FindFragment : Fragment(R.layout.fragment_find), SwipeRefreshLayout.OnRefr
                 searchText=query
                 findViewModel.searchMovieByName(query)
             }
-        })
+        })*/
+        edtMoviesName.doOnTextChanged {
+                str, _, _, _ ->findViewModel.searchMovieByName(str.toString())
+        }
+        buttonBack.setOnClickListener {
+            requireActivity().onBackPressed()
+        }
+        back.setOnClickListener{
+            requireActivity().onBackPressed()
+        }
     }
 
     private fun personalizeSearchView(){
