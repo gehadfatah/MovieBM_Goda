@@ -1,11 +1,13 @@
 package com.goda.movieapp.view
 
+import android.annotation.SuppressLint
 import android.content.SharedPreferences
 import android.net.ConnectivityManager
 import android.os.Bundle
 import android.view.*
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.GravityCompat
+import androidx.core.view.isVisible
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
@@ -20,6 +22,7 @@ import com.google.android.material.navigation.NavigationView
 import com.google.android.material.snackbar.Snackbar
 import com.goda.movieapp.R
 import com.goda.movieapp.domain.pojo.MovieResult
+import com.goda.movieapp.view.ui.home.HomeFragment
 import dagger.android.support.DaggerAppCompatActivity
 import kotlinx.android.synthetic.main.activity_home.*
 import kotlinx.android.synthetic.main.activity_home.view.*
@@ -28,11 +31,9 @@ import java.util.*
 class HomeActivity : DaggerAppCompatActivity(), NavController.OnDestinationChangedListener,
     SharedPreferences.OnSharedPreferenceChangeListener {
     private var snack: Snackbar? = null
+    private var thismenu: Menu? = null
 
     lateinit var sharedPreferences: SharedPreferences
-    var searchAdapter: SearchAdapter? = null
-    var searchedMovieList: List<MovieResult>? = null
-
     private lateinit var navController: NavController
     private lateinit var appBarConfiguration: AppBarConfiguration
 
@@ -54,12 +55,10 @@ class HomeActivity : DaggerAppCompatActivity(), NavController.OnDestinationChang
                 R.id.navigation_home,
                 R.id.navigation_popular,
                 R.id.navigation_child,
-                R.id.navigation_favorite,
-                R.id.navigation_setting
+                R.id.navigation_favorite
             ), drawerLayout
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
-
         navController.addOnDestinationChangedListener(this)
         navView.setupWithNavController(navController)
         updateNavViewMenuUI()
@@ -84,6 +83,7 @@ class HomeActivity : DaggerAppCompatActivity(), NavController.OnDestinationChang
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        thismenu=menu
         return configureToolbar(menu)
     }
 
@@ -95,11 +95,11 @@ class HomeActivity : DaggerAppCompatActivity(), NavController.OnDestinationChang
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.action_filter -> {
-                
-                var popTo = R.id.navigation_home
-                val navOptions: NavOptions = NavOptions.Builder().setPopUpTo(popTo, false).build()
-                // navController.navigate(R.id.navigation_search).po
-                navController.navigate(R.id.navigation_search, null, navOptions)
+                navController.navigate(R.id.navigateToSearch)
+                true
+            }
+            R.id.action_favorites -> {
+                navController.navigate(R.id.navigateToFavourite)
 
                 true
             }
@@ -124,7 +124,7 @@ class HomeActivity : DaggerAppCompatActivity(), NavController.OnDestinationChang
             changeMenuVisibility(
                 R.id.navigation_favorite,
                 sharedPreferences.getBoolean("favorite_visible", true)
-            )/*
+            )
         if (sharedPreferences.contains("child_visible"))
             changeMenuVisibility(
                 R.id.navigation_child,
@@ -134,7 +134,7 @@ class HomeActivity : DaggerAppCompatActivity(), NavController.OnDestinationChang
             changeMenuVisibility(
                 R.id.navigation_popular,
                 sharedPreferences.getBoolean("popular_visible", true)
-            )*/
+            )
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -142,47 +142,18 @@ class HomeActivity : DaggerAppCompatActivity(), NavController.OnDestinationChang
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
     }
 
-    /*   override fun onCreateOptionsMenu(menu: Menu): Boolean {
-           val inflater = menuInflater
-           inflater.inflate(R.menu.search, menu)
-           val searchViewItem = menu.findItem(R.id.search)
-           val searchView = searchViewItem.actionView as SearchView
-           searchView.queryHint = resources.getString(R.string.search_for_movies)
-           searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-               override fun onQueryTextSubmit(query: String): Boolean {
-                   if (isNetworkConnected()) {
-                       Search(query)
-                   }
-                   return false
-               }
-   
-               override fun onQueryTextChange(newText: String): Boolean {
-                   if (isNetworkConnected()) {
-                       Search(newText)
-                   }
-                   return false
-               }
-           })
-           searchView.setOnCloseListener {
-               if (searchedMovieList != null) {
-                   searchAdapter?.clear()
-                   //loadMovies()
-               }
-               false
-           }
-           return super.onCreateOptionsMenu(menu)
-       }*/
+    @SuppressLint("MissingPermission")
     private fun isNetworkConnected(): Boolean {
         val connMgr = getSystemService(CONNECTIVITY_SERVICE) as ConnectivityManager
         val networkInfo = connMgr.activeNetworkInfo
         return if (networkInfo != null && networkInfo.isConnected) {
             true
         } else {
-            //app.brandmark_task.view.activity.MainActivity.progressDialog.dismiss()
             showSnackBar()
             false
         }
     }
+
 
     fun showSnackBar() {
 
@@ -204,41 +175,6 @@ class HomeActivity : DaggerAppCompatActivity(), NavController.OnDestinationChang
             }
         }, 2000)
     }
-    /*  private fun Search(query: String): String? {
-          RetrofitClient.getInstance()
-              .getMovieService().searchForMovies(query, API_KEY)
-              .enqueue(object : Callback<MovieApiResponse?> {
-                  override fun onResponse(
-                      call: Call<MovieApiResponse?>,
-                      response: Response<MovieApiResponse?>
-                  ) {
-                      if (response.body() != null) {
-                          searchedMovieList = response.body().getMovies()
-                          if (searchedMovieList.isEmpty()) {
-                              getNoResult()
-                          }
-                          Log.d("onResponse --> ", searchedMovieList.size.toString() + " Movies")
-                          searchAdapter = SearchAdapter(
-                              applicationContext,
-                              searchedMovieList,
-                              object : SearchAdapterOnClickHandler() {
-                                  fun onClick(movie: Movie?) {
-                                      val intent =
-                                          Intent(this@MainActivity, MovieActivity::class.java)
-                                      intent.putExtra(MOVIE, movie)
-                                      startActivity(intent)
-                                  }
-                              })
-                      }
-                      recyclerView.setAdapter(searchAdapter)
-                  }
-  
-                  override fun onFailure(call: Call<MovieApiResponse?>, t: Throwable) {
-                      Log.d("onFailure --> ", " Failed to get movies")
-                  }
-              })
-          return query
-      }*/
 
     override fun onDestinationChanged(
         controller: NavController,
@@ -246,14 +182,31 @@ class HomeActivity : DaggerAppCompatActivity(), NavController.OnDestinationChang
         arguments: Bundle?
     ) {
         when (destination.id) {
-            R.id.detail_fragment, R.id.splash_fragment -> {
+            R.id.detail_fragment, R.id.splash_fragment, R.id.navigation_search -> {
                 toolbar.visibility = View.GONE
             }
-            else -> {
+            R.id.navigation_home->{
+
                 toolbar.visibility = View.VISIBLE
+                toolbar.tvToolbarTitle.text = destination.label
+                hideMenuItems(true)
+            }
+            else -> {
+                hideMenuItems()
+                toolbar.isVisible=true
                 toolbar.tvToolbarTitle.text = destination.label
             }
         }
+
+    }
+
+    private fun hideMenuItems(enabled:Boolean=false) {
+
+        val menuItemFav = thismenu?.findItem( R.id.action_favorites)
+        val menuItemSearch =thismenu?.findItem( R.id.action_filter)
+        menuItemFav?.isVisible=enabled
+        menuItemSearch?.isVisible=enabled
+
     }
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
@@ -306,3 +259,69 @@ class HomeActivity : DaggerAppCompatActivity(), NavController.OnDestinationChang
 
 
 }
+/*  private fun Search(query: String): String? {
+       RetrofitClient.getInstance()
+           .getMovieService().searchForMovies(query, API_KEY)
+           .enqueue(object : Callback<MovieApiResponse?> {
+               override fun onResponse(
+                   call: Call<MovieApiResponse?>,
+                   response: Response<MovieApiResponse?>
+               ) {
+                   if (response.body() != null) {
+                       searchedMovieList = response.body().getMovies()
+                       if (searchedMovieList.isEmpty()) {
+                           getNoResult()
+                       }
+                       Log.d("onResponse --> ", searchedMovieList.size.toString() + " Movies")
+                       searchAdapter = SearchAdapter(
+                           applicationContext,
+                           searchedMovieList,
+                           object : SearchAdapterOnClickHandler() {
+                               fun onClick(movie: Movie?) {
+                                   val intent =
+                                       Intent(this@MainActivity, MovieActivity::class.java)
+                                   intent.putExtra(MOVIE, movie)
+                                   startActivity(intent)
+                               }
+                           })
+                   }
+                   recyclerView.setAdapter(searchAdapter)
+               }
+
+               override fun onFailure(call: Call<MovieApiResponse?>, t: Throwable) {
+                   Log.d("onFailure --> ", " Failed to get movies")
+               }
+           })
+       return query
+   }*/
+
+/*   override fun onCreateOptionsMenu(menu: Menu): Boolean {
+       val inflater = menuInflater
+       inflater.inflate(R.menu.search, menu)
+       val searchViewItem = menu.findItem(R.id.search)
+       val searchView = searchViewItem.actionView as SearchView
+       searchView.queryHint = resources.getString(R.string.search_for_movies)
+       searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+           override fun onQueryTextSubmit(query: String): Boolean {
+               if (isNetworkConnected()) {
+                   Search(query)
+               }
+               return false
+           }
+
+           override fun onQueryTextChange(newText: String): Boolean {
+               if (isNetworkConnected()) {
+                   Search(newText)
+               }
+               return false
+           }
+       })
+       searchView.setOnCloseListener {
+           if (searchedMovieList != null) {
+               searchAdapter?.clear()
+               //loadMovies()
+           }
+           false
+       }
+       return super.onCreateOptionsMenu(menu)
+   }*/

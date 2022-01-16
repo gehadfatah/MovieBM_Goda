@@ -11,7 +11,7 @@ import com.goda.movieapp.domain.pojo.MovieResult
 import com.goda.movieapp.view.ui.home.viewholder.LoadingViewHolder
 import com.goda.movieapp.view.ui.home.viewholder.MovieViewHolder
 
-class MoviePagedListAdapter(private val listener: movieInteractionListener) :
+class MoviePagedListAdapter(private val listener: MovieInteractionListener) :
     PagedListAdapter<MovieResult, RecyclerView.ViewHolder>(diffUtilCallback) {
 
     private var state: PaginationState? = null

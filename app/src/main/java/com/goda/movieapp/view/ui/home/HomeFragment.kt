@@ -14,21 +14,26 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.goda.movieapp.R
 import com.goda.movieapp.domain.pagination.PaginationState
 import com.goda.movieapp.domain.pojo.MovieResult
+import com.goda.movieapp.util.isNetworkConnected
 import com.goda.movieapp.view.customview.EmptyView
+import com.goda.movieapp.view.ui.favorite.adapter.FavoriteListAdapter
 import com.goda.movieapp.view.ui.home.adapter.MoviePagedListAdapter
-import com.goda.movieapp.view.ui.home.adapter.movieInteractionListener
+import com.goda.movieapp.view.ui.home.adapter.MovieClickerListener
+import com.goda.movieapp.view.ui.home.adapter.MovieInteractionListener
 import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.fragment_home.*
+import kotlinx.android.synthetic.main.fragment_home.emptyView
 import javax.inject.Inject
 
 class HomeFragment : Fragment(R.layout.fragment_home), SwipeRefreshLayout.OnRefreshListener,
-    movieInteractionListener {
+    MovieInteractionListener, MovieClickerListener {
 
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
 
     private lateinit var homeViewModel: HomeViewModel
     private lateinit var pagedAdapter: MoviePagedListAdapter
+    private lateinit var pagedAdapter2: FavoriteListAdapter
 
     override fun onAttach(context: Context) {
         AndroidSupportInjection.inject(this)
@@ -50,22 +55,45 @@ class HomeFragment : Fragment(R.layout.fragment_home), SwipeRefreshLayout.OnRefr
 
     private fun obsStates() {
         homeViewModel.paginationState?.observe(viewLifecycleOwner, Observer {
+            if (::pagedAdapter.isInitialized) {
+                pagedAdapter.updatePaginationState(it)
+            }
             updateUIPaginationState(it)
-            pagedAdapter.updatePaginationState(it)
         })
     }
 
     private fun initUI() {
         emptyView.emptyStateType(EmptyView.STATETYPE.NOERROR, null)
         swipe.setOnRefreshListener(this)
-        pagedAdapter = MoviePagedListAdapter(this)
-        trendingList.layoutManager = gridLayoutManager()
-        trendingList.adapter = pagedAdapter
+
+        if (activity?.isNetworkConnected() == false) {
+            pagedAdapter2 = FavoriteListAdapter(this)
+            trendingList.layoutManager = GridLayoutManager(requireActivity(), 2)
+            trendingList.adapter = pagedAdapter2
+
+        } else {
+            pagedAdapter = MoviePagedListAdapter(this)
+            trendingList.layoutManager = gridLayoutManager()
+            trendingList.adapter = pagedAdapter
+        }
     }
 
     private fun obsData() {
         homeViewModel.moviePagedLiveData.observe(viewLifecycleOwner, Observer { pagedList ->
-            pagedAdapter.submitList(pagedList)
+            if (::pagedAdapter.isInitialized)
+                pagedAdapter.submitList(pagedList)
+            if (pagedList.isNotEmpty())
+                homeViewModel.insertAll(pagedList.snapshot())
+            else homeViewModel.getMoviesFromDatabase()
+                .observe(viewLifecycleOwner, Observer { favorites ->
+                    if (favorites.data != null && favorites.data.isNotEmpty()) {
+                        if (::pagedAdapter2.isInitialized){
+                            swipe.isRefreshing = false
+                            pagedAdapter2.submitList(favorites.data)
+                        }
+                    }
+
+                })
         })
     }
 
@@ -98,13 +126,13 @@ class HomeFragment : Fragment(R.layout.fragment_home), SwipeRefreshLayout.OnRefr
             }
             PaginationState.EMPTY -> {
                 swipe.isRefreshing = false
-                if (pagedAdapter.currentList.isNullOrEmpty()) {
+                if (::pagedAdapter.isInitialized&&pagedAdapter.currentList.isNullOrEmpty()) {
                     emptyView.emptyStateType(EmptyView.STATETYPE.EMPTY, null)
                 }
             }
             PaginationState.ERROR -> {
                 swipe.isRefreshing = false
-                if (pagedAdapter.currentList.isNullOrEmpty()) {
+                if (::pagedAdapter.isInitialized&&pagedAdapter.currentList.isNullOrEmpty()) {
                     emptyView.emptyStateType(EmptyView.STATETYPE.CONNECTION, View.OnClickListener {
                         onRefresh()
                     })

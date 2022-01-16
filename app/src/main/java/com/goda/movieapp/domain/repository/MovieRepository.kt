@@ -6,6 +6,7 @@ import com.goda.movieapp.data.remote.Api
 import com.goda.movieapp.domain.pojo.MovieDetail
 import com.goda.movieapp.domain.pojo.MovieQuery
 import com.goda.movieapp.domain.pojo.MovieResult
+import com.goda.movieapp.domain.pojo.Review
 import retrofit2.Response
 import javax.inject.Inject
 
@@ -14,10 +15,14 @@ class MovieRepository @Inject constructor(private val api: Api, private val movi
     suspend fun fetchMovies(map: Map<String, String>, queryTag: QUERYTAG): Response<MovieQuery> {
        return when(queryTag){
             QUERYTAG.SEARCH -> api.searchMovie(map)
-            QUERYTAG.DISCOVER -> api.popularMovie(map)
+            QUERYTAG.POPULAR -> api.popularMovie(map)
+            QUERYTAG.TOPRATED -> api.topMovie(map)
             QUERYTAG.TRENDING -> api.trendingMovie(map["time_window"] ?: error("week"), map)
         }
     }
+   suspend fun fetchReviewMovies(map: Map<String, String>,moviesId: Int): Response<Review> {
+       return api.getReviewsMovie(moviesId,map)
+   }
 
     suspend fun movieDetail(movieId: Long, query: String): Response<MovieDetail> {
         return api.movieDetail(movieId, query)
@@ -26,7 +31,13 @@ class MovieRepository @Inject constructor(private val api: Api, private val movi
     fun allFavoriteMovie(): LiveData<List<MovieResult>> {
         return movieDao.allFavorite()
     }
+    fun allMovies(): LiveData<List<MovieResult>> {
+        return movieDao.getAllMovies()
+    }
+    suspend fun insertAll(list: List<MovieResult>) {
+        return movieDao.insertAllMovies(list)
 
+    }
     suspend fun insert(movieResult: MovieResult) {
         return movieDao.insertFavorite(movieResult)
     }
@@ -44,7 +55,7 @@ class MovieRepository @Inject constructor(private val api: Api, private val movi
     }
 
     enum class QUERYTAG {
-        SEARCH, DISCOVER, TRENDING
+        SEARCH, POPULAR, TRENDING,TOPRATED
     }
 
 }

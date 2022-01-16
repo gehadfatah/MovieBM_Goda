@@ -4,7 +4,7 @@ import androidx.recyclerview.widget.RecyclerView
 import android.view.View
 import com.goda.movieapp.R
 import com.goda.movieapp.domain.pojo.MovieResult
-import com.goda.movieapp.view.ui.home.adapter.movieInteractionListener
+import com.goda.movieapp.view.ui.home.adapter.MovieInteractionListener
 import com.goda.movieapp.util.Constants.Companion.BASE_IMAGE_URL_API
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.movie_view_layout.view.*
@@ -13,7 +13,7 @@ class MovieViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
     fun bind(
         movieResult: MovieResult?,
-        listener: movieInteractionListener
+        listener: MovieInteractionListener
     ) {
         if (movieResult != null) {
             itemView.tv_movie_title.text = movieResult.title

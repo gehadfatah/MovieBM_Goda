@@ -7,9 +7,14 @@ import com.goda.movieapp.domain.pojo.MovieResult
 
 @Dao
 interface MovieDao {
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+   suspend fun insertAllMovies(list: List<MovieResult>)
 
     @Query("SELECT * FROM MovieLocal")
-    fun allFavorite(): LiveData<List<MovieResult>>
+    fun getAllMovies() : LiveData<List<MovieResult>>
+
+    @Query("SELECT * FROM MovieLocal  WHERE isFavourite=:favourite")
+    fun allFavorite(favourite:Boolean=true): LiveData<List<MovieResult>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertFavorite(movieLocal: MovieResult)
