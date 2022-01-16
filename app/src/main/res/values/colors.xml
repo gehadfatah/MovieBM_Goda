@@ -1,14 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#E21853</color>
+  <!--  <color name="colorPrimary">#E21853</color>
     <color name="colorPrimaryDark">#35296D</color>
-    <color name="colorAccent">#D3D3D3</color>
+    <color name="colorAccent">#D3D3D3</color>-->
+    <color name="colorPrimary">#032541</color>
+    <color name="colorPrimaryDark">#031D33</color>
+    <color name="colorAccent">#03DAC5</color>
     <color name="borderCy">#F7F7F7</color>
     <color name="grstart">#E21853</color>
     <color name="grend">#35296D</color>
     <color name="windowBackground2">#031F37</color>
     <color name="windowBackground">#35296D</color>
-
+  <color name="yellew">#FFD245</color>
+  <color name="yellew2">#FFE951</color>
     <color name="White_100">#ffffff</color>
     <color name="White_95">#F2FFFFFF</color>
     <color name="White_90">#e6ffffff</color>
@@ -31,6 +35,7 @@
     <color name="White_10">#1AFFFFFF</color>
     <color name="White_5">#0DFFFFFF</color>
     <color name="White_0">#00FFFFFF</color>
+    <color name="White">#FFFFFF</color>
 
     <!--black-->
     <color name="Black_100">#000000</color>

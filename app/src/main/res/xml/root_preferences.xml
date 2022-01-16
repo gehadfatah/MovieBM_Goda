@@ -20,7 +20,7 @@
         <EditTextPreference
             app:key="favorite_menu"
             app:title="Nombre/Label"
-            app:defaultValue="Favoritos"
+            app:defaultValue="@string/title_favorite"
             app:useSimpleSummaryProvider="true"/>
 
         <SwitchPreferenceCompat
@@ -38,7 +38,7 @@
         <EditTextPreference
             app:key="child_menu"
             app:title="Nombre/Label"
-            app:defaultValue="Para niños"
+            app:defaultValue="@string/title_top"
             app:useSimpleSummaryProvider="true"/>
 
         <SwitchPreferenceCompat
@@ -56,7 +56,7 @@
         <EditTextPreference
             app:key="popular_menu"
             app:title="Nombre/Label"
-            app:defaultValue="Populares"
+            app:defaultValue="@string/title_popular"
             app:useSimpleSummaryProvider="true"/>
 
         <SwitchPreferenceCompat

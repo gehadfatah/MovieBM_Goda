@@ -7,7 +7,7 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
 
-        <item name="android:windowBackground">@color/windowBackground</item>
+        <item name="android:windowBackground">@color/colorPrimaryDark</item>
         <item name="android:textViewStyle">@style/MonseratTextViewStyle</item>
         <item name="android:textColorPrimary">@drawable/textview_selector</item>
         <item name="android:textColorSecondary">@drawable/textview_secundary_selector</item>
@@ -32,7 +32,7 @@
     </style>
 
     <style name="RadioButtonStyle" parent="Widget.AppCompat.CompoundButton.RadioButton">
-        <item name="android:fontFamily">@font/montserrat_light</item>
+        <item name="android:fontFamily">@font/montserrat_medium</item>
         <item name="android:textColor">@color/White_100</item>
     </style>
 
@@ -53,6 +53,8 @@
         <item name="android:fontFamily">@font/montserrat_medium</item>
         <item name="android:textColor">@color/White_100</item>
     </style>
-
+    <style name="AppTheme.toolbar">
+        <item name="colorControlNormal">@color/colorAccent</item>
+    </style>
 
 </resources>
