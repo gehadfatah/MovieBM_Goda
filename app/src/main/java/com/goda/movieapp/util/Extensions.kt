@@ -23,6 +23,7 @@ fun NavController.navigateSafe(@IdRes resId: Int, args: Bundle? = null) {
             currentNode?.findNode(destinationId)?.let { navigate(resId, args) }
         }
     }}*/
+
 @SuppressLint("MissingPermission")
  fun Activity.isNetworkConnected(): Boolean {
     val connMgr = this.getSystemService(DaggerAppCompatActivity.CONNECTIVITY_SERVICE) as ConnectivityManager
@@ -32,7 +33,9 @@ fun NavController.navigateSafe(@IdRes resId: Int, args: Bundle? = null) {
 fun Context.showLongToast(msgId: Int) {
     Toast.makeText(this, getString(msgId), Toast.LENGTH_SHORT).show()
 }
-
+fun Context.showLongToast(msg: String) {
+    Toast.makeText(this, msg, Toast.LENGTH_LONG).show()
+}
 fun Context.showShortToast(msg: String) {
     Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()
 }

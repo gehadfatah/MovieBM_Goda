@@ -4,11 +4,13 @@ import android.annotation.SuppressLint
 import android.content.SharedPreferences
 import android.net.ConnectivityManager
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.GravityCompat
 import androidx.core.view.isVisible
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.lifecycle.Observer
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.NavOptions
@@ -21,7 +23,11 @@ import androidx.preference.PreferenceManager
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.snackbar.Snackbar
 import com.goda.movieapp.R
+import com.goda.movieapp.common.ApplicationIntegration
 import com.goda.movieapp.domain.pojo.MovieResult
+import com.goda.movieapp.util.ConnectionLiveData
+import com.goda.movieapp.util.showLongToast
+import com.goda.movieapp.util.showShortToast
 import com.goda.movieapp.view.ui.home.HomeFragment
 import dagger.android.support.DaggerAppCompatActivity
 import kotlinx.android.synthetic.main.activity_home.*
@@ -67,9 +73,35 @@ class HomeActivity : DaggerAppCompatActivity(), NavController.OnDestinationChang
             resources.getString(R.string.no_internet_connection),
             Snackbar.LENGTH_INDEFINITE
         )
+        setNetworkListner()
 
     }
+    private fun setNetworkListner() {
+        /* Live data object and setting an observer on it to monitor connection status to update countries  */
+        val connectionLiveData =
+            ConnectionLiveData(ApplicationIntegration.getApplication())
+        connectionLiveData.observe(this, Observer { connection ->
+            /* every time connection state changes, we'll be notified and can perform action accordingly */
+            if (connection != null && !isDestroyed) {
+                if (connection.isConnected) {
+                   // RelOffline.visibility = View.GONE;
+                    val navController: NavController =
+                       findNavController(R.id.nav_host_fragment)
+                    navController.run {
 
+                    }
+                } else {
+                    //RelOffline.visibility = View.VISIBLE;
+
+                    this.showLongToast(getString(R.string.no_internet_connection))
+
+                    Log.d("d", "onChanged: ");
+
+                }
+            }
+        })
+
+    }
     override fun onResume() {
         super.onResume()
         sharedPreferences

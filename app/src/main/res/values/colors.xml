@@ -12,6 +12,8 @@
     <color name="windowBackground2">#031F37</color>
     <color name="windowBackground">#35296D</color>
   <color name="yellew">#FFD245</color>
+  <color name="black_20">#33000000</color> <!-- 20 is for alpha and others pairs zero's are for R G B -->
+
   <color name="yellew2">#FFE951</color>
     <color name="White_100">#ffffff</color>
     <color name="White_95">#F2FFFFFF</color>

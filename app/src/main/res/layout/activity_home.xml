@@ -49,6 +49,31 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:navGraph="@navigation/mobile_navigation" />
+        <RelativeLayout
+            android:id="@+id/RelOffline"
+            android:layout_width="170dp"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="155dp"
+            android:background="@drawable/offline_bg"
+            android:gravity="center"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:visibility="visible">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="3dp"
+            android:drawableStart="@drawable/ic_warning_white"
+            android:drawablePadding="@dimen/xx"
+            android:gravity="center_vertical"
+            android:padding="5dp"
+            android:text="@string/offline"
+            android:textColor="@color/White" />
+        </RelativeLayout>
 
     </LinearLayout>
 
