@@ -58,6 +58,9 @@ class MovieRepository @Inject constructor(private val api: Api, private val movi
     fun existAsFavorite(id: String): LiveData<List<MovieResult>> {
         return movieDao.existAsFavorite(id)
     }
+    fun existAsHide(id: String): LiveData<List<MovieResult>> {
+        return movieDao.existAsHide(id)
+    }
 
     enum class QUERYTAG {
         SEARCH, POPULAR, TRENDING,TOPRATED

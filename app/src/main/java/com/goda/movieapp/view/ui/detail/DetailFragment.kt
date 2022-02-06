@@ -5,9 +5,11 @@ import android.os.Bundle
 import android.os.Handler
 import android.util.Log
 import android.view.View
+import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.google.android.material.snackbar.Snackbar
@@ -19,8 +21,11 @@ import com.goda.movieapp.domain.pojo.MovieResult
 import com.goda.movieapp.view.customview.OverlapLoadingView
 import com.goda.movieapp.view.ui.detail.adapter.ActorListAdapter
 import com.goda.movieapp.util.Constants
+import com.goda.movieapp.util.setEventStateValue
 import com.goda.movieapp.util.showShortToast
 import com.goda.movieapp.view.customview.EmptyView
+import com.goda.movieapp.view.ui.home.SELL_BACK_KEY
+import com.goda.movieapp.view.ui.home.SELL_BACK_VALUE
 import com.goda.movieapp.view.ui.home.adapter.MovieReviewPagedListAdapter
 import com.goda.movieapp.view.ui.home.adapter.OnRetryReview
 import com.squareup.picasso.Picasso
@@ -59,6 +64,12 @@ class DetailFragment : Fragment(R.layout.fragment_detail), View.OnClickListener,
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val callback = requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
+            setEventStateValue(SELL_BACK_KEY, SELL_BACK_VALUE)
+            findNavController().navigateUp()
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
+
 
     }
 
@@ -106,6 +117,10 @@ class DetailFragment : Fragment(R.layout.fragment_detail), View.OnClickListener,
         viewModel.movieIsFavorite(movieResult!!.id.toString())
             .observe(viewLifecycleOwner, Observer {
                 changeFavoriteIcon(it.isNotEmpty() && it.first().isFavourite)
+            })
+        viewModel.movieIsHide(movieResult!!.id.toString())
+            .observe(viewLifecycleOwner, Observer {
+                if (it.isNotEmpty() &&it.first().isHide)context?.showShortToast("You not see this movie again :)")
             })
         viewModel.moviePagedLiveData.observe(viewLifecycleOwner, Observer { pagedList ->
             pagedAdapter.submitList(pagedList)

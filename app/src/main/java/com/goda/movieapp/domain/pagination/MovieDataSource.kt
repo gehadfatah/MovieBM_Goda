@@ -57,20 +57,15 @@ class MovieDataSource(
             val result = repository.fetchMovies(queryParams, queryTag)
             retryQuery = null
             val listing = result.body()
-            val getAllHide = repository.allHideable()
-           /* Transformations.map(repository.allHideable()) { listHide ->
-                //val hideId= listHide.first { it.id== }
+            val hideList = repository.allHideable()
 
-            }*/
-            val arr= ArrayList(listing?.results)
-            for (mov in getAllHide) {
-                arr.minus(mov)
+            val newList = arrayListOf<MovieResult>()
+
+            for (fj in listing?.results ?: emptyList()) {
+                if (fj.id !in hideList.map { movieResult -> movieResult.id }) newList.add(fj)
             }
-          /*  listing?.results = listing?.results?.filterNot { moveiResult ->
-                moveiResult.id == getAllHide.first { it.id == moveiResult.id &&it.isHide}.id
-            }*/
-            //listing?.results=arr
-            if (listing?.results != null && listing?.results?.isNotEmpty()==true) {
+            listing?.results = newList
+            if (listing?.results != null && listing?.results?.isNotEmpty() == true) {
                 updateState(PaginationState.DONE)
             } else updateState(PaginationState.EMPTY)
             callback(listing?.results ?: listOf())

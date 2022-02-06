@@ -7,7 +7,7 @@ import com.goda.movieapp.domain.pojo.MovieResult
 
 @Dao
 interface MovieDao {
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertAllMovies(list: List<MovieResult>)
 
     @Query("SELECT * FROM MovieLocal")
@@ -33,5 +33,6 @@ interface MovieDao {
 
     @Query("SELECT * FROM MovieLocal WHERE id=:id LIMIT 1")
     fun existAsFavorite(id: String): LiveData<List<MovieResult>>
-
+    @Query("SELECT * FROM MovieLocal WHERE id=:id LIMIT 1")
+    fun existAsHide(id: String): LiveData<List<MovieResult>>
 }

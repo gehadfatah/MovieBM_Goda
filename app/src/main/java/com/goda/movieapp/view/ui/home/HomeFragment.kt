@@ -14,6 +14,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.goda.movieapp.R
 import com.goda.movieapp.domain.pagination.PaginationState
 import com.goda.movieapp.domain.pojo.MovieResult
+import com.goda.movieapp.util.goldEventChangedListener
 import com.goda.movieapp.util.isNetworkConnected
 import com.goda.movieapp.view.customview.EmptyView
 import com.goda.movieapp.view.ui.favorite.adapter.FavoriteListAdapter
@@ -24,6 +25,8 @@ import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.android.synthetic.main.fragment_home.emptyView
 import javax.inject.Inject
+const val SELL_BACK_KEY = "SELL_BACK_KEY"
+const val SELL_BACK_VALUE = "SELL_BACK_VALUE"
 
 class HomeFragment : Fragment(R.layout.fragment_home), SwipeRefreshLayout.OnRefreshListener,
     MovieInteractionListener, MovieClickerListener {
@@ -51,6 +54,16 @@ class HomeFragment : Fragment(R.layout.fragment_home), SwipeRefreshLayout.OnRefr
         initUI()
         obsStates()
         obsData()
+        initListner()
+    }
+
+    private fun initListner() {
+        //this listener to handle when user click back from review screen we should reset user selection
+        goldEventChangedListener(SELL_BACK_KEY) {
+            if (it == SELL_BACK_VALUE) {
+             onRefresh()
+            }
+        }
     }
 
     private fun obsStates() {

@@ -96,6 +96,7 @@ class DetailViewModel @Inject constructor(private val repository: MovieRepositor
     fun getFavoriteSavedState(): SingleLiveEvent<Resource<Pair<Boolean, Boolean>>> = favoriteSavedState
 
     fun movieIsFavorite(id: String): LiveData<List<MovieResult>> = repository.existAsFavorite(id)
+    fun movieIsHide(id: String): LiveData<List<MovieResult>> = repository.existAsHide(id)
 
 
 
