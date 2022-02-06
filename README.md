@@ -15,6 +15,8 @@ This module requires the following modules/libraries:
 
 .Androidx
 
+.Dagger2
+
 .Room
 
 .Android ViewModel
