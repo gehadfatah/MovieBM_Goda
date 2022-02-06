@@ -78,6 +78,16 @@ class DetailViewModel @Inject constructor(private val repository: MovieRepositor
             favoriteSavedState.postValue(Resource(Status.ERROR, null, e))
         }
     }
+    fun saveHideMovie(movieLocal: MovieResult, hide: Boolean=true) =
+        viewModelScope.launch {
+        try {
+            movieLocal.isHide=hide
+            repository.updateHide(movieLocal)
+            favoriteSavedState.postValue(Resource(Status.SUCCESS, Pair(true, hide), null))
+        } catch (e: Exception) {
+            favoriteSavedState.postValue(Resource(Status.ERROR, null, e))
+        }
+    }
 
     fun getMovieDetail(): LiveData<Resource<MovieDetail>> = movieDetail
 

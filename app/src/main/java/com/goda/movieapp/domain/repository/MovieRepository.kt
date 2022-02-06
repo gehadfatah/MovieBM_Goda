@@ -31,6 +31,9 @@ class MovieRepository @Inject constructor(private val api: Api, private val movi
     fun allFavoriteMovie(): LiveData<List<MovieResult>> {
         return movieDao.allFavorite()
     }
+    suspend fun allHideable(): List<MovieResult> {
+        return movieDao.allHideable()
+    }
     fun allMovies(): LiveData<List<MovieResult>> {
         return movieDao.getAllMovies()
     }
@@ -45,7 +48,9 @@ class MovieRepository @Inject constructor(private val api: Api, private val movi
     suspend fun update(movieResult: MovieResult) {
         return movieDao.updateFavorite(movieResult)
     }
-
+    suspend fun updateHide(movieResult: MovieResult) {
+        return movieDao.updateHide(movieResult)
+    }
     suspend fun delete(movieResult: MovieResult) {
         return movieDao.deleteFavorite(movieResult)
     }

@@ -18,6 +18,7 @@ data class MovieResult(
     val popularity: Double=0.0,
     val title: String="",
     var isFavourite: Boolean=false,
+    var isHide: Boolean=false,
     val vote_average: Double=0.0
 ) : Parcelable
 
@@ -70,7 +71,7 @@ data class MovieQuery(
     @SerializedName("page")
     val page: Int? = 0,
     @SerializedName("results")
-    val results: List<MovieResult>? = listOf(),
+    var results: List<MovieResult>? = listOf(),
     @SerializedName("total_pages")
     val totalPages: Int? = 0,
     @SerializedName("total_results")

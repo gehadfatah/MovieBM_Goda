@@ -8,19 +8,25 @@ import com.goda.movieapp.domain.pojo.MovieResult
 @Dao
 interface MovieDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-   suspend fun insertAllMovies(list: List<MovieResult>)
+    suspend fun insertAllMovies(list: List<MovieResult>)
 
     @Query("SELECT * FROM MovieLocal")
-    fun getAllMovies() : LiveData<List<MovieResult>>
+    fun getAllMovies(): LiveData<List<MovieResult>>
 
     @Query("SELECT * FROM MovieLocal  WHERE isFavourite=:favourite")
-    fun allFavorite(favourite:Boolean=true): LiveData<List<MovieResult>>
+    fun allFavorite(favourite: Boolean = true): LiveData<List<MovieResult>>
+
+    @Query("SELECT * FROM MovieLocal  WHERE isHide=:hide")
+    suspend fun allHideable(hide: Boolean = true): List<MovieResult>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertFavorite(movieLocal: MovieResult)
 
     @Update
     suspend fun updateFavorite(movieLocal: MovieResult)
+
+    @Update
+    suspend fun updateHide(movieLocal: MovieResult)
 
     @Delete
     suspend fun deleteFavorite(movieLocal: MovieResult)

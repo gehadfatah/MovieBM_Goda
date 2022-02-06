@@ -105,7 +105,7 @@ class DetailFragment : Fragment(R.layout.fragment_detail), View.OnClickListener,
         })
         viewModel.movieIsFavorite(movieResult!!.id.toString())
             .observe(viewLifecycleOwner, Observer {
-                changeFavoriteIcon(it.isNotEmpty() && it.get(0).isFavourite)
+                changeFavoriteIcon(it.isNotEmpty() && it.first().isFavourite)
             })
         viewModel.moviePagedLiveData.observe(viewLifecycleOwner, Observer { pagedList ->
             pagedAdapter.submitList(pagedList)
@@ -182,6 +182,7 @@ class DetailFragment : Fragment(R.layout.fragment_detail), View.OnClickListener,
 
     private fun updateCachedUI() {
         ivFavorite.setOnClickListener(this)
+        ivHide.setOnClickListener(this)
         Picasso.get().load(Constants.BASE_IMAGE_URL_w500_API + movieResult!!.backdrop_path)
             .error(R.drawable.ic_broken_image)
             .placeholder(R.drawable.loading_animation)
@@ -211,6 +212,9 @@ class DetailFragment : Fragment(R.layout.fragment_detail), View.OnClickListener,
         when (v!!.id) {
             R.id.ivFavorite -> {
                 viewModel.saveFavorite(movieResult!!, !movieIsFavorite)
+            }
+            R.id.ivHide -> {
+                viewModel.saveHideMovie(movieResult!!, true)
             }
         }
     }

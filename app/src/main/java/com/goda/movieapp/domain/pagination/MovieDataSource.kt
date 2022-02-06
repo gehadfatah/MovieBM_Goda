@@ -2,7 +2,10 @@ package com.goda.movieapp.domain.pagination
 
 import android.util.Log
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.Transformations
 import androidx.paging.PageKeyedDataSource
+import com.goda.movieapp.data.Resource
+import com.goda.movieapp.data.Status
 import com.goda.movieapp.domain.pojo.MovieResult
 import com.goda.movieapp.domain.repository.MovieRepository
 import com.goda.movieapp.util.SingleLiveEvent
@@ -34,7 +37,7 @@ class MovieDataSource(
     override fun loadAfter(params: LoadParams<Int>, callback: LoadCallback<Int, MovieResult>) {
         val page = params.key
         retryQuery = { loadAfter(params, callback) }
-        executeQuery(page, queryTag ) {
+        executeQuery(page, queryTag) {
             callback.onResult(it, page.plus(1))
         }
     }
@@ -54,7 +57,20 @@ class MovieDataSource(
             val result = repository.fetchMovies(queryParams, queryTag)
             retryQuery = null
             val listing = result.body()
-            if (listing?.results != null && listing.results.isNotEmpty()) {
+            val getAllHide = repository.allHideable()
+           /* Transformations.map(repository.allHideable()) { listHide ->
+                //val hideId= listHide.first { it.id== }
+
+            }*/
+            val arr= ArrayList(listing?.results)
+            for (mov in getAllHide) {
+                arr.minus(mov)
+            }
+          /*  listing?.results = listing?.results?.filterNot { moveiResult ->
+                moveiResult.id == getAllHide.first { it.id == moveiResult.id &&it.isHide}.id
+            }*/
+            //listing?.results=arr
+            if (listing?.results != null && listing?.results?.isNotEmpty()==true) {
                 updateState(PaginationState.DONE)
             } else updateState(PaginationState.EMPTY)
             callback(listing?.results ?: listOf())
