@@ -6,6 +6,7 @@ import android.os.Handler
 import android.util.Log
 import android.view.View
 import androidx.activity.addCallback
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -69,8 +70,20 @@ class DetailFragment : Fragment(R.layout.fragment_detail), View.OnClickListener,
             findNavController().navigateUp()
         }
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
+        hideHideMovieOptionIncaseNotFromHome()
 
+    }
 
+    private fun hideHideMovieOptionIncaseNotFromHome() {
+
+        ivHide.isVisible = when (findNavController().previousBackStackEntry?.destination?.id) {
+            R.id.navigation_home -> {
+                true
+            }
+            else -> {
+                false
+            }
+        }
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -97,7 +110,7 @@ class DetailFragment : Fragment(R.layout.fragment_detail), View.OnClickListener,
     }
 
     private fun sendReviewUser() {
-     activity?.showShortToast(rating.toString())
+        activity?.showShortToast(rating.toString())
 
     }
 
@@ -120,7 +133,7 @@ class DetailFragment : Fragment(R.layout.fragment_detail), View.OnClickListener,
             })
         viewModel.movieIsHide(movieResult!!.id.toString())
             .observe(viewLifecycleOwner, Observer {
-                if (it.isNotEmpty() &&it.first().isHide)context?.showShortToast("You not see this movie again :)")
+                if (it.isNotEmpty() && it.first().isHide) context?.showShortToast("You not see this movie again :)")
             })
         viewModel.moviePagedLiveData.observe(viewLifecycleOwner, Observer { pagedList ->
             pagedAdapter.submitList(pagedList)
@@ -248,7 +261,9 @@ class DetailFragment : Fragment(R.layout.fragment_detail), View.OnClickListener,
             PaginationState.ERROR -> {
                 swipe.isRefreshing = false
                 if (pagedAdapter.currentList.isNullOrEmpty()) {
-                     emptyView.emptyStateType(EmptyView.STATETYPE.CONNECTION, View.OnClickListener { onRefresh() })
+                    emptyView.emptyStateType(
+                        EmptyView.STATETYPE.CONNECTION,
+                        View.OnClickListener { onRefresh() })
                 }
             }
             PaginationState.DONE -> {
