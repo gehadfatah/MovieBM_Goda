@@ -122,6 +122,7 @@ class FindFragment : Fragment(R.layout.search_layout), SwipeRefreshLayout.OnRefr
                 swipe.isRefreshing = false
                 emptyView.emptyStateType(EmptyView.STATETYPE.NOERROR, null)
             }
+            else -> {}
         }
     }
 

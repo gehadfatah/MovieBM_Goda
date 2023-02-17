@@ -19,7 +19,7 @@ class HomeViewModel @Inject constructor(private val repository: MovieRepository)
 
     private var movieDataSourceFactory: MovieDataSourceFactory =
         MovieDataSourceFactory(
-            MovieRepository.QUERYTAG.POPULAR,
+            MovieRepository.QUERYTAG.DISCOVER,
             QueryHelper.popularMovies(),
             repository
         )

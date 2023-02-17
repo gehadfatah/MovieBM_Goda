@@ -117,6 +117,7 @@ class PopularFragment : Fragment(R.layout.popular_fragment), SwipeRefreshLayout.
                 swipe.isRefreshing = false
                 emptyView.emptyStateType(EmptyView.STATETYPE.NOERROR, null)
             }
+            else -> {}
         }
     }
 

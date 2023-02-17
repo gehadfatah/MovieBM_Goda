@@ -93,8 +93,8 @@ class DetailFragment : Fragment(R.layout.fragment_detail), View.OnClickListener,
         obsState()
         obsData()
         initView()
-        viewModel.loadMovieDetail(movieResult!!.id)
-        viewModel.getReviews(movieResult!!.id)
+        movieResult?.id?.let { viewModel.loadMovieDetail(it) }
+        movieResult?.id?.let { viewModel.getReviews(it) }
     }
 
     private fun setListener() {
@@ -127,11 +127,11 @@ class DetailFragment : Fragment(R.layout.fragment_detail), View.OnClickListener,
         viewModel.getMovieDetail().observe(viewLifecycleOwner, Observer {
             updateUI(it)
         })
-        viewModel.movieIsFavorite(movieResult!!.id.toString())
+        viewModel.movieIsFavorite(movieResult?.id.toString())
             .observe(viewLifecycleOwner, Observer {
                 changeFavoriteIcon(it.isNotEmpty() && it.first().isFavourite)
             })
-        viewModel.movieIsHide(movieResult!!.id.toString())
+        viewModel.movieIsHide(movieResult?.id.toString())
             .observe(viewLifecycleOwner, Observer {
                 if (it.isNotEmpty() && it.first().isHide) context?.showShortToast("You not see this movie again :)")
             })
@@ -156,7 +156,7 @@ class DetailFragment : Fragment(R.layout.fragment_detail), View.OnClickListener,
             movie_popularity.text = resource.data.popularity.toString()
             movie_releasedate.text = resource.data.releaseDate
             if (resource.data.runtime != null) {
-                val hours = resource.data.runtime!! / 60
+                val hours = resource.data.runtime / 60
                 val min = resource.data.runtime % 60
                 tvDuration.text = String.format("%sh %smin", hours, min)
                 tvDuration.setCompoundDrawablesRelativeWithIntrinsicBounds(
@@ -184,14 +184,14 @@ class DetailFragment : Fragment(R.layout.fragment_detail), View.OnClickListener,
                     getString(R.string.no_internet_connection),
                     Snackbar.LENGTH_INDEFINITE
                 )
-            snackbar!!.setAction("Retry") {
-                snackbar!!.dismiss()
+            snackbar?.setAction("Retry") {
+                snackbar?.dismiss()
                 Handler().postDelayed({
-                    viewModel.loadMovieDetail(movieResult!!.id)
+                    movieResult?.id?.let { it1 -> viewModel.loadMovieDetail(it1) }
                     viewModel.movieId = movieResult?.id ?: 0
                 }, 250)
             }
-            snackbar!!.show()
+            snackbar?.show()
         }
     }
 
@@ -211,19 +211,19 @@ class DetailFragment : Fragment(R.layout.fragment_detail), View.OnClickListener,
     private fun updateCachedUI() {
         ivFavorite.setOnClickListener(this)
         ivHide.setOnClickListener(this)
-        Picasso.get().load(Constants.BASE_IMAGE_URL_w500_API + movieResult!!.backdrop_path)
+        Picasso.get().load(Constants.BASE_IMAGE_URL_w500_API + movieResult?.backdrop_path)
             .error(R.drawable.ic_broken_image)
             .placeholder(R.drawable.loading_animation)
             .into(ivBackdrop)
-        Picasso.get().load(Constants.BASE_IMAGE_URL_API + movieResult!!.poster_path)
+        Picasso.get().load(Constants.BASE_IMAGE_URL_API + movieResult?.poster_path)
             .error(R.drawable.ic_broken_image)
             .placeholder(R.drawable.loading_animation)
             .into(ivPoster)
-        tvMovieTitleValue.text = movieResult!!.title
-        if (movieResult!!.title.length > 10) {
+        tvMovieTitleValue.text = movieResult?.title
+        if ((movieResult?.title?.length ?: 0) > 10) {
             tvMovieTitleValue.isSelected = true
         }
-        tvVoteAverage.text = movieResult!!.vote_average.toString()
+        tvVoteAverage.text = movieResult?.vote_average.toString()
         actorsAdapter = ActorListAdapter()
         actors.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
@@ -231,18 +231,18 @@ class DetailFragment : Fragment(R.layout.fragment_detail), View.OnClickListener,
     }
 
     override fun onDestroyView() {
-        if (snackbar != null && snackbar!!.isShown)
-            snackbar!!.dismiss()
+        if (snackbar != null && snackbar?.isShown == true)
+            snackbar?.dismiss()
         super.onDestroyView()
     }
 
     override fun onClick(v: View?) {
-        when (v!!.id) {
+        when (v?.id) {
             R.id.ivFavorite -> {
-                viewModel.saveFavorite(movieResult!!, !movieIsFavorite)
+                movieResult?.let { viewModel.saveFavorite(it, !movieIsFavorite) }
             }
             R.id.ivHide -> {
-                viewModel.saveHideMovie(movieResult!!, true)
+                movieResult?.let { viewModel.saveHideMovie(it, true) }
             }
         }
     }
@@ -270,6 +270,7 @@ class DetailFragment : Fragment(R.layout.fragment_detail), View.OnClickListener,
                 swipe.isRefreshing = false
                 emptyView.emptyStateType(EmptyView.STATETYPE.NOERROR, null)
             }
+            else -> {}
         }
     }
 

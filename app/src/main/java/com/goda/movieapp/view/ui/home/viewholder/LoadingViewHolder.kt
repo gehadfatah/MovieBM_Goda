@@ -26,6 +26,7 @@ class LoadingViewHolder(view: View) : RecyclerView.ViewHolder(view) {
                 itemView.btn_retry.visibility = VISIBLE
                 itemView.tv_error_message.visibility = VISIBLE
             }
+            else -> {}
         }
     }
 

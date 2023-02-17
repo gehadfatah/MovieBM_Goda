@@ -115,6 +115,7 @@ class TopRatedFragment : Fragment(R.layout.fragment_child) , SwipeRefreshLayout.
                 swipe.isRefreshing = false
                 emptyView.emptyStateType(EmptyView.STATETYPE.NOERROR, null)
             }
+            else -> {}
         }
     }
 

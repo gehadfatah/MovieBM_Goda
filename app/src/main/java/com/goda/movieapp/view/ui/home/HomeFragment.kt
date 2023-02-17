@@ -155,6 +155,7 @@ class HomeFragment : Fragment(R.layout.fragment_home), SwipeRefreshLayout.OnRefr
                 swipe.isRefreshing = false
                 emptyView.emptyStateType(EmptyView.STATETYPE.NOERROR, null)
             }
+            else -> {}
         }
     }
 

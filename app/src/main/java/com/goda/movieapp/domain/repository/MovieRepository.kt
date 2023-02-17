@@ -16,6 +16,7 @@ class MovieRepository @Inject constructor(private val api: Api, private val movi
        return when(queryTag){
             QUERYTAG.SEARCH -> api.searchMovie(map)
             QUERYTAG.POPULAR -> api.popularMovie(map)
+            QUERYTAG.DISCOVER -> api.discoverMovie(map)
             QUERYTAG.TOPRATED -> api.topMovie(map)
             QUERYTAG.TRENDING -> api.trendingMovie(map["time_window"] ?: error("week"), map)
         }
@@ -63,7 +64,7 @@ class MovieRepository @Inject constructor(private val api: Api, private val movi
     }
 
     enum class QUERYTAG {
-        SEARCH, POPULAR, TRENDING,TOPRATED
+        SEARCH, POPULAR, TRENDING,TOPRATED,DISCOVER
     }
 
 }
